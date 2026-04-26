@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RANK Homes — Love Where You Live</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --red: #C8102E;
+      --red-h: #A50D25;
+      --dark: #0E0F14;
+      --mid: #1C1D24;
+      --white: #FFFFFF;
+      --off: #F7F7F5;
+      --gray: #6B7280;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--dark);
+      background: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .disp {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 0.92;
+      text-transform: uppercase;
+    }
+    .hdg {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+    .label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .label::before {
+      content: '';
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+
+    /* NAV */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      transition: box-shadow 0.3s;
+    }
+    #nav.scrolled { box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between; height: 76px;
+    }
+    .nav-link {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--dark); text-decoration: none;
+      position: relative; transition: color 0.2s;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; background: var(--red);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .nav-link:hover { color: var(--red); }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    /* BUTTONS */
+    .btn-r {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 0.88rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.7rem 1.6rem;
+      background: var(--red); color: #fff;
+      border: 2px solid var(--red);
+      text-decoration: none; display: inline-block; cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-r:hover { background: var(--red-h); border-color: var(--red-h); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,16,46,0.28); }
+    .btn-r:active { transform: translateY(0); }
+    .btn-o {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 0.88rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.7rem 1.6rem;
+      background: transparent; color: #fff;
+      border: 2px solid rgba(255,255,255,0.5);
+      text-decoration: none; display: inline-block; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .btn-o:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-1px); }
+
+    /* HERO */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #080910 0%, #111520 45%, #0c0810 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-glow {
+      position: absolute; width: 60vw; height: 60vw;
+      top: -20%; right: -10%;
+      background: radial-gradient(circle, rgba(200,16,46,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-stripe {
+      position: absolute; top: 0; right: 38%; bottom: 0;
+      width: 3px; background: var(--red);
+      transform: skewX(-6deg); opacity: 0.5;
+    }
+    .hero-stripe2 {
+      position: absolute; top: 0; right: calc(38% + 14px); bottom: 0;
+      width: 1px; background: var(--red);
+      transform: skewX(-6deg); opacity: 0.2;
+    }
+    .hero-content {
+      position: relative; z-index: 10;
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 2rem; padding-top: 5rem; width: 100%;
+    }
+
+    /* STAT STRIP */
+    .stat-n {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+      letter-spacing: -0.02em; line-height: 1;
+    }
+    .stat-l {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38); margin-top: 0.3rem;
+    }
+
+    /* SERVICE CARDS */
+    .svc-card {
+      background: #fff; border: 1px solid #e8e8e6; padding: 2rem;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s, border-color 0.3s;
+    }
+    .svc-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(200,16,46,0.1), 0 4px 12px rgba(0,0,0,0.06);
+      border-color: var(--red);
+    }
+    .svc-icon {
+      width: 44px; height: 44px;
+      background: rgba(200,16,46,0.08);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    /* PROJECT CARDS */
+    .proj-card { position: relative; overflow: hidden; cursor: pointer; }
+    .proj-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+    .proj-card:hover img { transform: scale(1.06); }
+    .proj-card-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(to top, rgba(14,15,20,0.92) 0%, transparent 100%);
+    }
+    .proj-overlay {
+      position: absolute; inset: 0;
+      background: rgba(200,16,46,0.7);
+      opacity: 0; transition: opacity 0.35s ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .proj-card:hover .proj-overlay { opacity: 1; }
+
+    /* NEWS CARDS */
+    .news-card { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .news-card:hover { transform: translateY(-5px); }
+    .news-img { height: 210px; overflow: hidden; background: #e8e8e0; }
+    .news-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.45s ease; }
+    .news-card:hover .news-img img { transform: scale(1.05); }
+
+    /* TEAM */
+    .team-img { overflow: hidden; }
+    .team-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+    .team-card:hover .team-img img { transform: scale(1.05); }
+
+    /* FORM */
+    .finput {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: #fff; padding: 0.875rem 1rem;
+      width: 100%; font-family: 'Nunito Sans', sans-serif;
+      font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .finput::placeholder { color: rgba(255,255,255,0.35); }
+    .finput:focus { border-color: var(--red); background: rgba(255,255,255,0.09); }
+
+    /* FADE-UP */
+    .fu { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .fu.vis { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
+
+    @keyframes sdot { 0%,100%{transform:translateY(0);opacity:1} 80%{transform:translateY(12px);opacity:0} }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #f0f0ef; }
+    ::-webkit-scrollbar-thumb { background: var(--red); }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#"><img src="brand_assests/RANK Homes Logo.png" alt="RANK Homes" style="height:46px;width:auto;" /></a>
+    <div class="hidden md:flex items-center gap-7">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#news" class="nav-link">News</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+    <div class="flex items-center gap-5">
+      <span class="hidden lg:block" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.06em;color:var(--dark);">1800 RANK HOMES</span>
+      <a href="#contact" class="btn-r">Get a Quote</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-stripe"></div>
+  <div class="hero-stripe2"></div>
+  <div class="hero-content">
+    <div style="max-width:700px;">
+      <div class="label mb-5" style="color:rgba(255,255,255,0.5);">
+        <span style="display:block;width:22px;height:2px;background:var(--red);flex-shrink:0;"></span>
+        Est. 2005 — Premium Home Builder
+      </div>
+      <h1 class="disp text-white mb-6" style="font-size:clamp(3.8rem,9vw,8rem);">
+        Quality Homes,<br /><span style="color:var(--red);">Built</span> For Life
+      </h1>
+      <p style="font-size:1rem;color:rgba(255,255,255,0.6);max-width:460px;line-height:1.8;margin-bottom:2rem;">
+        From custom builds to development projects, RANK Homes creates exceptional living spaces across Australia — designed around the way you live.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:3rem;">
+        <a href="#projects" class="btn-r">Our Projects</a>
+        <a href="#contact" class="btn-o">Contact Us</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <div style="width:36px;height:1px;background:rgba(255,255,255,0.2);"></div>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);">Love Where You Live</span>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:10;">
+    <div style="width:24px;height:38px;border:2px solid rgba(255,255,255,0.2);border-radius:12px;display:flex;justify-content:center;padding-top:7px;">
+      <div style="width:3px;height:8px;background:var(--red);border-radius:2px;animation:sdot 1.8s ease infinite;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS STRIP ══ -->
+<section style="background:var(--dark);padding:2.75rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="fu"><div class="stat-n text-white">1,200<span style="color:var(--red);">+</span></div><div class="stat-l">Homes Built</div></div>
+      <div class="fu d1"><div class="stat-n text-white">100<span style="color:var(--red);">+</span></div><div class="stat-l">Unique Designs</div></div>
+      <div class="fu d2"><div class="stat-n text-white">20<span style="color:var(--red);">+</span></div><div class="stat-l">Years Experience</div></div>
+      <div class="fu d3"><div class="stat-n text-white">98<span style="color:var(--red);">%</span></div><div class="stat-l">Client Satisfaction</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICES ══ -->
+<section id="services" style="padding:6rem 0;background:var(--off);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 fu">
+      <div>
+        <div class="label mb-3">Our Expertise</div>
+        <h2 class="hdg" style="font-size:clamp(2rem,4vw,3rem);line-height:1;">What We<br />Do Best</h2>
+      </div>
+      <p style="max-width:360px;color:var(--gray);line-height:1.8;font-size:0.93rem;">From the initial concept to the final handover, RANK Homes delivers exceptional quality at every step.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="svc-card fu">
+        <div class="label mb-3">Design</div>
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <h3 class="hdg mb-2" style="font-size:1.25rem;line-height:1.1;">Custom<br />Home Design</h3>
+        <p style="color:var(--gray);font-size:0.875rem;line-height:1.7;">Tailored architectural designs that reflect your vision, lifestyle, and block requirements.</p>
+      </div>
+      <div class="svc-card fu d1">
+        <div class="label mb-3">Build</div>
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="17"/><line x1="9" y1="14.5" x2="15" y2="14.5"/></svg></div>
+        <h3 class="hdg mb-2" style="font-size:1.25rem;line-height:1.1;">Development<br />Projects</h3>
+        <p style="color:var(--gray);font-size:0.875rem;line-height:1.7;">Multi-lot residential developments with proven expertise in planning, construction, and delivery.</p>
+      </div>
+      <div class="svc-card fu d2">
+        <div class="label mb-3">Rebuild</div>
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg></div>
+        <h3 class="hdg mb-2" style="font-size:1.25rem;line-height:1.1;">Knockdown<br />Rebuild</h3>
+        <p style="color:var(--gray);font-size:0.875rem;line-height:1.7;">Transform your existing block into a brand-new home without the hassle of moving suburbs.</p>
+      </div>
+      <div class="svc-card fu d3">
+        <div class="label mb-3">Invest</div>
+        <div class="svc-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <h3 class="hdg mb-2" style="font-size:1.25rem;line-height:1.1;">Investment<br />Properties</h3>
+        <p style="color:var(--gray);font-size:0.875rem;line-height:1.7;">High-yield investment solutions designed to maximise your return and minimise risk.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about" style="padding:6rem 0;background:#fff;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div class="fu">
+        <div class="label mb-4">About RANK Homes</div>
+        <h2 class="hdg mb-6" style="font-size:clamp(2rem,4vw,3rem);line-height:1.05;">Building Dreams<br />Since 2005</h2>
+        <p style="color:var(--gray);line-height:1.8;margin-bottom:1.25rem;font-size:0.95rem;">RANK Homes was founded on a simple belief: everyone deserves a home they love. Over two decades, we've helped thousands of Australians build their dream homes — from first-time buyers to seasoned investors.</p>
+        <p style="color:var(--gray);line-height:1.8;margin-bottom:2rem;font-size:0.95rem;">Our team of experienced architects, designers, and builders work collaboratively to deliver homes that are not just beautiful, but built to last.</p>
+        <a href="#contact" class="btn-r">Learn More</a>
+      </div>
+      <div class="fu d2">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div style="grid-column:span 2;background:var(--red);padding:2.5rem 2rem;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(3.5rem,7vw,5.5rem);letter-spacing:-0.03em;line-height:1;color:#fff;">2,340</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.65);margin-top:0.4rem;">Happy Families</div>
+          </div>
+          <div style="background:var(--dark);padding:1.75rem;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.5rem;letter-spacing:-0.02em;line-height:1;color:#fff;">50<span style="color:var(--red);">+</span></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:0.3rem;">Suburbs</div>
+          </div>
+          <div style="background:var(--off);padding:1.75rem;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.5rem;letter-spacing:-0.02em;line-height:1;color:var(--dark);">4.9<span style="color:var(--red);">★</span></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray);margin-top:0.3rem;">Avg Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROJECTS ══ -->
+<section id="projects" style="padding:6rem 0;background:var(--off);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 fu">
+      <div>
+        <div class="label mb-3">Our Portfolio</div>
+        <h2 class="hdg" style="font-size:clamp(2rem,4vw,3rem);line-height:1;">Projects</h2>
+      </div>
+      <a href="#" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);text-decoration:none;display:flex;align-items:center;gap:0.5rem;">View All <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:240px 240px;gap:1rem;">
+      <div class="proj-card fu" style="grid-row:span 2;">
+        <img src="https://placehold.co/600x490/1a1a2e/252535" alt="The Meridian" />
+        <div class="proj-card-info">
+          <div class="label mb-1" style="color:rgba(255,255,255,0.5);font-size:0.68rem;">Custom Build</div>
+          <div class="hdg text-white" style="font-size:1.35rem;">The Meridian</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-top:0.2rem;">Southbank, VIC</div>
+        </div>
+        <div class="proj-overlay"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:#fff;">View Project</span></div>
+      </div>
+      <div class="proj-card fu d1">
+        <img src="https://placehold.co/600x240/1a2030/252b3a" alt="The Archer" />
+        <div class="proj-card-info">
+          <div class="label mb-1" style="color:rgba(255,255,255,0.5);font-size:0.68rem;">Development</div>
+          <div class="hdg text-white" style="font-size:1.1rem;">The Archer</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;">Brighton, VIC</div>
+        </div>
+        <div class="proj-overlay"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:#fff;">View Project</span></div>
+      </div>
+      <div class="proj-card fu d2">
+        <img src="https://placehold.co/600x240/201420/2e1e2e" alt="The Haven" />
+        <div class="proj-card-info">
+          <div class="label mb-1" style="color:rgba(255,255,255,0.5);font-size:0.68rem;">Knockdown Rebuild</div>
+          <div class="hdg text-white" style="font-size:1.1rem;">The Haven</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;">Toorak, VIC</div>
+        </div>
+        <div class="proj-overlay"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:#fff;">View Project</span></div>
+      </div>
+      <div class="proj-card fu d1">
+        <img src="https://placehold.co/600x240/141a20/1e262e" alt="The Summit" />
+        <div class="proj-card-info">
+          <div class="label mb-1" style="color:rgba(255,255,255,0.5);font-size:0.68rem;">Custom Build</div>
+          <div class="hdg text-white" style="font-size:1.1rem;">The Summit</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;">Frankston, VIC</div>
+        </div>
+        <div class="proj-overlay"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:#fff;">View Project</span></div>
+      </div>
+      <div class="proj-card fu d2">
+        <img src="https://placehold.co/600x240/181220/231830" alt="The Ridge" />
+        <div class="proj-card-info">
+          <div class="label mb-1" style="color:rgba(255,255,255,0.5);font-size:0.68rem;">Investment</div>
+          <div class="hdg text-white" style="font-size:1.1rem;">The Ridge</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;">Geelong, VIC</div>
+        </div>
+        <div class="proj-overlay"><span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:#fff;">View Project</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ NEWS ══ -->
+<section id="news" style="padding:6rem 0;background:#fff;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 fu">
+      <div>
+        <div class="label mb-3">Stay Informed</div>
+        <h2 class="hdg" style="font-size:clamp(2rem,4vw,3rem);line-height:1;">Latest News</h2>
+      </div>
+      <a href="#" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);text-decoration:none;display:flex;align-items:center;gap:0.5rem;">All Articles <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="news-card fu">
+        <div class="news-img mb-5"><img src="https://placehold.co/600x420/e8e8e0/d4d4cc" alt="News" /></div>
+        <div class="label mb-3" style="font-size:0.68rem;">26 Apr 2026 — Design Tips</div>
+        <h3 class="hdg mb-3" style="font-size:1.2rem;line-height:1.1;">How to Choose the Right Floor Plan for Your Family</h3>
+        <p style="color:var(--gray);font-size:0.875rem;line-height:1.75;margin-bottom:1rem;">Navigating hundreds of floor plan options can be overwhelming. Our design experts share their top tips for making the right call.</p>
+        <a href="#" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--red);text-decoration:none;">Read More →</a>
+      </div>
+      <div class="news-card fu d1">
+        <div class="news-img mb-5"><img src="https://placehold.co/600x420/e0e8e0/ccd4cc" alt="News" /></div>
+        <div class="label mb-3" style="font-size:0.68rem;">18 Apr 2026 — Market Update</div>
+        <h3 class="hdg mb-3" style="font-size:1.2rem;line-height:1.1;">Victorian First Home Buyer Grants: What You Need to Know</h3>
+        <p style="color:var(--gray);font-size:0.875rem;line-height:1.75;margin-bottom:1rem;">The latest state government updates to the First Home Owner Grant and how they affect your new build plans.</p>
+        <a href="#" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--red);text-decoration:none;">Read More →</a>
+      </div>
+      <div class="news-card fu d2">
+        <div class="news-img mb-5"><img src="https://placehold.co/600x420/e0e0e8/ccccd4" alt="News" /></div>
+        <div class="label mb-3" style="font-size:0.68rem;">10 Apr 2026 — Company News</div>
+        <h3 class="hdg mb-3" style="font-size:1.2rem;line-height:1.1;">RANK Homes Wins Builder of the Year at HIA Awards</h3>
+        <p style="color:var(--gray);font-size:0.875rem;line-height:1.75;margin-bottom:1rem;">We're thrilled to announce that RANK Homes has taken home the prestigious HIA Builder of the Year award for 2026.</p>
+        <a href="#" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.82rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--red);text-decoration:none;">Read More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BOARD MEMBERS ══ -->
+<section style="padding:6rem 0;background:var(--off);">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="text-center mb-14 fu">
+      <div class="label mb-3" style="justify-content:center;">Our Leadership</div>
+      <h2 class="hdg" style="font-size:clamp(2rem,4vw,3rem);line-height:1;">Board Members</h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-7">
+      <div class="team-card fu text-center">
+        <div class="team-img mb-4" style="height:230px;background:#ddd8d0;"><img src="https://placehold.co/400x460/d8d0c8/c4bcb4" alt="Michael Rank" /></div>
+        <div class="hdg" style="font-size:1.05rem;">Michael Rank</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-top:0.2rem;">CEO & Founder</div>
+      </div>
+      <div class="team-card fu d1 text-center">
+        <div class="team-img mb-4" style="height:230px;background:#d0d8d0;"><img src="https://placehold.co/400x460/ccd4cc/b8c0b8" alt="Sarah Rank" /></div>
+        <div class="hdg" style="font-size:1.05rem;">Sarah Rank</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-top:0.2rem;">Director of Design</div>
+      </div>
+      <div class="team-card fu d2 text-center">
+        <div class="team-img mb-4" style="height:230px;background:#d0d4d8;"><img src="https://placehold.co/400x460/c8ccd4/b4b8c0" alt="David Chen" /></div>
+        <div class="hdg" style="font-size:1.05rem;">David Chen</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-top:0.2rem;">Head of Construction</div>
+      </div>
+      <div class="team-card fu d3 text-center">
+        <div class="team-img mb-4" style="height:230px;background:#d8d0d4;"><img src="https://placehold.co/400x460/d0c8cc/bcb4b8" alt="Lisa Wong" /></div>
+        <div class="hdg" style="font-size:1.05rem;">Lisa Wong</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-top:0.2rem;">Chief Financial Officer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section style="padding:6rem 0;background:#fff;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="text-center mb-14 fu">
+      <div class="label mb-3" style="justify-content:center;">What Clients Say</div>
+      <h2 class="hdg" style="font-size:clamp(2rem,4vw,3rem);line-height:1;">Client Testimonials</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="fu" style="border-left:3px solid var(--red);padding-left:1.5rem;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.5rem;color:var(--red);line-height:1;margin-bottom:0.75rem;">"</div>
+        <p style="color:#3d3d4e;line-height:1.8;font-size:0.92rem;margin-bottom:1.25rem;">RANK Homes made the entire build process stress-free. They communicated at every stage and delivered exactly what they promised. We love our new home!</p>
+        <div class="hdg" style="font-size:0.95rem;">James & Emma Patel</div>
+        <div style="color:var(--gray);font-size:0.82rem;margin-top:0.2rem;">Custom Build — Doncaster, VIC</div>
+        <div style="color:var(--red);margin-top:0.4rem;font-size:0.85rem;">★★★★★</div>
+      </div>
+      <div class="fu d1" style="border-left:3px solid var(--red);padding-left:1.5rem;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.5rem;color:var(--red);line-height:1;margin-bottom:0.75rem;">"</div>
+        <p style="color:#3d3d4e;line-height:1.8;font-size:0.92rem;margin-bottom:1.25rem;">As a first-time builder, I was nervous, but the RANK Homes team held my hand through everything. The result exceeded every expectation I had.</p>
+        <div class="hdg" style="font-size:0.95rem;">Priya Sharma</div>
+        <div style="color:var(--gray);font-size:0.82rem;margin-top:0.2rem;">First Home — Berwick, VIC</div>
+        <div style="color:var(--red);margin-top:0.4rem;font-size:0.85rem;">★★★★★</div>
+      </div>
+      <div class="fu d2" style="border-left:3px solid var(--red);padding-left:1.5rem;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:2.5rem;color:var(--red);line-height:1;margin-bottom:0.75rem;">"</div>
+        <p style="color:#3d3d4e;line-height:1.8;font-size:0.92rem;margin-bottom:1.25rem;">We've used RANK Homes for three investment properties. Consistent quality, on-time delivery, and great rental yields. Couldn't ask for more.</p>
+        <div class="hdg" style="font-size:0.95rem;">Robert & Anne Fitzpatrick</div>
+        <div style="color:var(--gray);font-size:0.82rem;margin-top:0.2rem;">Investment Portfolio — Melbourne, VIC</div>
+        <div style="color:var(--red);margin-top:0.4rem;font-size:0.85rem;">★★★★★</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact" style="background:var(--dark);padding:6rem 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <div class="fu">
+        <div class="label mb-4" style="color:rgba(255,255,255,0.4);">
+          <span style="display:block;width:22px;height:2px;background:var(--red);flex-shrink:0;"></span>
+          Get In Touch
+        </div>
+        <h2 class="hdg text-white mb-5" style="font-size:clamp(2rem,4vw,3.5rem);line-height:1.02;">Let's Build<br />Your Future</h2>
+        <p style="color:rgba(255,255,255,0.45);line-height:1.8;font-size:0.93rem;margin-bottom:2.5rem;">Ready to start your new home journey? Fill in the form and one of our consultants will be in touch within 24 hours.</p>
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:36px;height:36px;background:rgba(200,16,46,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.15rem;">Phone</div>
+              <div style="color:#fff;font-size:0.93rem;">1800 RANK HOMES</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:36px;height:36px;background:rgba(200,16,46,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.15rem;">Email</div>
+              <div style="color:#fff;font-size:0.93rem;">hello@rankhomes.com.au</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div style="width:36px;height:36px;background:rgba(200,16,46,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:0.15rem;">Address</div>
+              <div style="color:#fff;font-size:0.93rem;">Level 5, 123 Collins St, Melbourne VIC 3000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fu d2">
+        <form onsubmit="return false;" style="display:flex;flex-direction:column;gap:1rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <input type="text" placeholder="First Name" class="finput" />
+            <input type="text" placeholder="Last Name" class="finput" />
+          </div>
+          <input type="email" placeholder="Email Address" class="finput" />
+          <input type="tel" placeholder="Phone Number" class="finput" />
+          <select class="finput" style="appearance:none;cursor:pointer;">
+            <option value="" disabled selected>I'm interested in...</option>
+            <option>Custom Home Design</option>
+            <option>Development Project</option>
+            <option>Knockdown Rebuild</option>
+            <option>Investment Property</option>
+          </select>
+          <textarea placeholder="Tell us about your project..." class="finput" style="height:110px;resize:none;"></textarea>
+          <button type="submit" class="btn-r" style="align-self:flex-start;padding:0.9rem 2.25rem;">Send Enquiry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer style="background:#07080D;padding:4rem 0 2rem;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 2rem;">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+      <div>
+        <img src="brand_assests/RANK Homes Logo.png" alt="RANK Homes" style="height:48px;width:auto;margin-bottom:1rem;" />
+        <p style="color:rgba(255,255,255,0.3);font-size:0.875rem;line-height:1.8;max-width:210px;margin-bottom:1.5rem;">Building exceptional homes across Victoria since 2005.</p>
+        <div style="display:flex;gap:0.6rem;">
+          <a href="#" style="width:32px;height:32px;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#C8102E';this.style.color='#C8102E'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='rgba(255,255,255,0.35)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+          <a href="#" style="width:32px;height:32px;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#C8102E';this.style.color='#C8102E'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='rgba(255,255,255,0.35)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" style="width:32px;height:32px;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='#C8102E';this.style.color='#C8102E'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='rgba(255,255,255,0.35)'"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:1.25rem;">Company</div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">About Us</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Our Team</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Careers</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Awards</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:1.25rem;">Services</div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Custom Build</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Development Projects</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Knockdown Rebuild</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Investment Property</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:1.25rem;">Resources</div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">News & Blog</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Home Designs</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">FAQ</a>
+          <a href="#" style="color:rgba(255,255,255,0.6);font-size:0.88rem;text-decoration:none;" onmouseover="this.style.color='#C8102E'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.07);padding-top:1.75rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;">
+      <p style="color:rgba(255,255,255,0.22);font-size:0.78rem;">© 2026 RANK Homes Pty Ltd. All rights reserved. — Love Where You Live</p>
+      <div style="display:flex;gap:1.5rem;">
+        <a href="#" style="color:rgba(255,255,255,0.22);font-size:0.78rem;text-decoration:none;">Terms</a>
+        <a href="#" style="color:rgba(255,255,255,0.22);font-size:0.78rem;text-decoration:none;">Privacy</a>
+        <a href="#" style="color:rgba(255,255,255,0.22);font-size:0.78rem;text-decoration:none;">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.04, rootMargin: '0px 0px 120px 0px' });
+  document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+  // Fallback: ensure all content visible after 1.5s (handles screenshots & no-JS)
+  setTimeout(() => {
+    document.querySelectorAll('.fu').forEach(el => el.classList.add('vis'));
+  }, 1500);
+</script>
+</body>
+</html>
